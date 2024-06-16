@@ -7,12 +7,15 @@ body {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-family: "Poppins";
 }
 
 #gameCanvas {
-  display: grid;
-  border: 2px solid black;
+  /* display: grid; */
+  /* border: 2px solid black; */
+  box-shadow: rgba(122, 129, 135, 0.2) 0px 8px 24px;
   /* background-color: green; */
 }

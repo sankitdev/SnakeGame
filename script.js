@@ -1,10 +1,14 @@
 //Selction & Declaring variables for each task
 let canvas = document.getElementById("gameCanvas");
+let scoreNum = document.querySelector("#score");
 let context = canvas.getContext("2d");
 let snake = [{ x: canvas.width / 2, y: canvas.height / 2 }];
 let food;
 let direction = "right";
 let gameState = true;
+let score = 1;
+let snakeSpeed = 200; //millisecond
+let lastMoveTime = 0;
 const img = new Image();
 img.src = "start.png";
 
@@ -40,7 +44,7 @@ function draw() {
   foodDraw();
 }
 
-// Snkae Move
+// Snake Move
 function moveSnake() {
   let head = { ...snake[0] };
 
@@ -53,8 +57,11 @@ function moveSnake() {
   //Adding the new head to snake
   snake.unshift(head);
 
-  if (head.x === food.x && head.y === food.y) placeFood();
-  else {
+  if (head.x === food.x && head.y === food.y) {
+    placeFood();
+    scoreNum.innerHTML = score++;
+    console.log(score);
+  } else {
     snake.pop();
   }
 }
@@ -89,21 +96,26 @@ function checkCollision() {
   }
 }
 
-function gameLoop() {
+function gameLoop(timeStamp) {
+  console.log(timeStamp);
   if (gameState) {
-    moveSnake();
-    draw();
-    checkCollision();
+    if (timeStamp - lastMoveTime > snakeSpeed) {
+      moveSnake();
+      draw();
+      checkCollision();
+      lastMoveTime = timeStamp;
+    }
+    requestAnimationFrame(gameLoop);
   } else {
     alert("Game over!!");
-    clearInterval(gameInterval);
   }
 }
 
-//Game Loop
-let gameInterval;
+//Start the Game Loop when canvas is clicked
 canvas.addEventListener("click", () => {
-  gameInterval = setInterval(gameLoop, 100);
+  if (gameState) {
+    requestAnimationFrame(gameLoop);
+  }
 });
 
 placeFood();
